@@ -10,6 +10,9 @@ public class AgentManager : MonoBehaviour
     public Transform player; // Reference to the player
     public float followRadius = 20f; // Radius within which the AI will follow the player
     public int aiDamage = 10; // Damage value that the AI will deal to the player
+    float stationaryTime = 1.0f; // Time the AI will stay stationary after moving
+    float stationaryTimer = 0f; // Timer to track stationary time
+    bool isStationary = false; // Flag to check if the AI is stationary
 
     // Start is called before the first frame update
     void Start()
@@ -21,6 +24,17 @@ public class AgentManager : MonoBehaviour
     void Update()
     {
         timer += Time.deltaTime; // Increment timer
+        stationaryTimer += Time.deltaTime; // Increment stationary timer
+
+        if (isStationary) // Check if the AI is currently stationary
+        {
+            if (stationaryTimer >= stationaryTime) // Check if stationary time has elapsed
+            {
+                isStationary = false; // Allow movement again
+                stationaryTimer = 0f; // Reset stationary timer
+            }
+            return; // Skip the movement logic if stationary
+        }
 
         if (timer >= changeDestinationTime) // Check if it's time to change destination
         {
@@ -42,6 +56,9 @@ public class AgentManager : MonoBehaviour
                     UnityEngine.AI.NavMesh.SamplePosition(randomDirection, out navHit, 50, UnityEngine.AI.NavMesh.AllAreas); // Find a valid point on the NavMesh
                     agent.GetComponent<AIController>().agent.SetDestination(navHit.position); // Set the destination to the valid point
                 }
+                // After setting the destination, set the AI to be stationary
+                isStationary = true; // Set the flag to indicate AI is stationary
+                stationaryTimer = 0f; // Reset the stationary timer
             }
             timer = 0f; // Reset timer after changing destinations
         }
