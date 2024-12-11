@@ -6,6 +6,8 @@ public class PlayerSounds : MonoBehaviour
 {
     public AudioClip walkingSound; // Assign this in the Inspector
     private AudioSource audioSource;
+    public bool isWalking;
+    public PlayerMovement pm;
 
     // Start is called before the first frame update
     void Start()
@@ -13,13 +15,14 @@ public class PlayerSounds : MonoBehaviour
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.clip = walkingSound;
         audioSource.loop = true; // Set to loop for walking sound
+        pm = GetComponent<PlayerMovement>();
     }
 
     // Update is called once per frame
     void Update()
     {
         // Check if the player is moving
-        if (IsPlayerMoving())
+        if (isWalking)
         {
             if (!audioSource.isPlaying)
             {
@@ -33,12 +36,13 @@ public class PlayerSounds : MonoBehaviour
                 audioSource.Stop(); // Stop walking sound
             }
         }
-    }
-
-    private bool IsPlayerMoving()
-    {
-        // Implement your logic to check if the player is moving
-        // For example, check the player's velocity or input
-        return true; // Placeholder, replace with actual movement check
-    }
+        if (pm.characterController.isGrounded && (pm._controllerVelocity.x > 0 || pm._controllerVelocity.z > 0))
+        {
+            isWalking = true;
+        }
+        else
+        {
+            isWalking = false;
+        }
+    }     
 }
