@@ -13,11 +13,15 @@ using UnityEngine;
         [SerializeField] private float _gravity = -9.81f;
         [Range(1f, 20f)]
         [SerializeField] private float _jumpHeight;
+        [SerializeField] private float _groundCheckRadius = 0.3f;
+        [SerializeField] private float _groundCheckDistance = 0.5f;
+        [SerializeField] private LayerMask _groundMask = -1;
+        public Vector3 moveVelocity;
 
         public CharacterController characterController;
         public Vector3 _controllerVelocity;
 
-        private bool isGrounded; // New variable to track grounded state
+        public bool isGrounded; // New variable to track grounded state
 
         // Start is called before the first frame update
         void Start()
@@ -34,7 +38,7 @@ using UnityEngine;
             // stops the y velocity when player is on the ground and the velocity has reached 0
             if (isGrounded && _controllerVelocity.y < 0)
             {
-                _controllerVelocity.y = 0;
+                _controllerVelocity.y = -2f;
             }
 
             // Get the movement input
@@ -56,12 +60,8 @@ using UnityEngine;
             // Calculate the desired movement direction based on camera orientation
             Vector3 desiredMoveDirection = (right * moveX + forward * moveZ).normalized;
 
-            // Update the x and z components of _controllerVelocity based on movement input
-            _controllerVelocity.x = desiredMoveDirection.x * _movementSpeed; // Update x based on camera direction
-            _controllerVelocity.z = desiredMoveDirection.z * _movementSpeed; // Update z based on camera direction
-
-            // moves the controller in the desired direction on the x- and z-axis
-            characterController.Move(new Vector3(_controllerVelocity.x, 0, _controllerVelocity.z) * Time.deltaTime);
+            // Calculate movement velocity
+            moveVelocity = desiredMoveDirection * _movementSpeed;
 
             // gravity affects the controller on the y-axis
             _controllerVelocity.y += _gravity * Time.deltaTime;
@@ -78,14 +78,28 @@ using UnityEngine;
             // the controller is able to run
             if (Input.GetKey(KeyCode.LeftShift))
             {
-                characterController.Move(new Vector3(_controllerVelocity.x, 0, _controllerVelocity.z) * Time.deltaTime * _runMultiplier);
+                moveVelocity *= _runMultiplier;
             }
+
+            Vector3 finalVelocity = new Vector3(moveVelocity.x, _controllerVelocity.y, moveVelocity.z);
+
+            characterController.Move(finalVelocity * Time.deltaTime);
         }
 
         private bool CheckIfGrounded()
         {
-            // Cast a ray downwards from the player's position
-            return Physics.Raycast(transform.position, Vector3.down, 1.1f); // Adjust the distance as needed
+            Vector3 spherePosition = transform.position + (Vector3.down * (characterController.height / 2 - characterController.radius));
+            if (Physics.SphereCast(spherePosition, _groundCheckRadius, Vector3.down, out RaycastHit hit, _groundCheckDistance, _groundMask))
+            {
+                float slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
+
+                if (slopeAngle <= characterController.slopeLimit)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 

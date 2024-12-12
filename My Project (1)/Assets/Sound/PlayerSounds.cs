@@ -8,6 +8,8 @@ public class PlayerSounds : MonoBehaviour
     private AudioSource audioSource;
     public bool isWalking;
     public PlayerMovement pm;
+    public bool isSprinting; // Add this variable to track sprinting state
+    public float sprintPitchMultiplier = 1.5f; // Multiplier for pitch when sprinting
 
     // Start is called before the first frame update
     void Start()
@@ -36,13 +38,23 @@ public class PlayerSounds : MonoBehaviour
                 audioSource.Stop(); // Stop walking sound
             }
         }
-        if (pm.characterController.isGrounded && (pm._controllerVelocity.x > 0 || pm._controllerVelocity.z > 0))
+        if (pm.characterController.isGrounded && pm.moveVelocity.magnitude > 0)
         {
             isWalking = true;
+            audioSource.pitch = isSprinting ? sprintPitchMultiplier : 1.0f; // Adjust pitch based on sprinting
         }
         else
         {
             isWalking = false;
+        }
+
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            isSprinting = true;
+        }
+        else
+        {
+            isSprinting = false;
         }
     }     
 }
