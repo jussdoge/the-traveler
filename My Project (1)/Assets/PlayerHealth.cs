@@ -43,6 +43,20 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log("Player healed: " + healAmount + ". Current health: " + currentHealth);
     }
 
+    // Method to handle collisions
+    void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Collision detected with: " + collision.gameObject.name); // Log the name of the collided object
+        if (collision.gameObject.CompareTag("AI")) // Check if the collided object is tagged as "AI"
+        {
+            TakeDamage(10); // Call TakeDamage with a specified amount
+        }
+        else
+        {
+            Debug.Log("Collided with non-AI object: " + collision.gameObject.name); // Log if not an AI
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {

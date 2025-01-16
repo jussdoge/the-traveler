@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AgentManager : MonoBehaviour
 {
+    public int damageAmount = 10;
     GameObject[] agents;
     float changeDestinationTime = 2.0f; // Time interval to change destination
     float timer = 0f; // Timer to track time for changing destination
@@ -12,7 +13,9 @@ public class AgentManager : MonoBehaviour
     public int aiDamage = 10; // Damage value that the AI will deal to the player
     float stationaryTime = 1.0f; // Time the AI will stay stationary after moving
     float stationaryTimer = 0f; // Timer to track stationary time
-    bool isStationary = false; // Flag to check if the AI is stationary
+    bool isStationary = false;
+    private float attackCooldown = 5.0f; // Cooldown time in seconds
+    private float lastAttackTime = 2.0f; // Time of the last attack
 
     // Start is called before the first frame update
     void Start()
@@ -63,15 +66,21 @@ public class AgentManager : MonoBehaviour
             timer = 0f; // Reset timer after changing destinations
         }
     }
-
+     // Amount of damage the enemy deals
     void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Collision detected with: " + collision.gameObject.name); // Log the name of the collided object
-        // Check if the collided object is the player
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player")) // Check if the collided object is tagged as "Player"
         {
-            // Assuming the player has a method to take damage
-            collision.gameObject.GetComponent<PlayerHealth>().TakeDamage(aiDamage); // Damage value can be adjusted
+            if (Time.time >= lastAttackTime + attackCooldown) // Check if cooldown has passed
+            {
+                PlayerHealth playerHealth = collision.gameObject.GetComponent<PlayerHealth>(); // Get the PlayerHealth component
+                if (playerHealth != null)
+                {
+                    playerHealth.TakeDamage(damageAmount); // Call TakeDamage on the player
+                    lastAttackTime = Time.time; // Update the last attack time
+                }
+            }
         }
     }
 }
+
