@@ -49,7 +49,7 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log("Collision detected with: " + collision.gameObject.name); // Log the name of the collided object
         if (collision.gameObject.CompareTag("AI")) // Check if the collided object is tagged as "AI"
         {
-            TakeDamage(10); // Call TakeDamage with a specified amount
+            TakeDamage(5); // Call TakeDamage with a specified amount
         }
         else
         {
@@ -62,4 +62,5 @@ public class PlayerHealth : MonoBehaviour
     {
         
     }
+        
 }

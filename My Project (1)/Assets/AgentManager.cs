@@ -27,17 +27,17 @@ public class AgentManager : MonoBehaviour
     void Update()
     {
         timer += Time.deltaTime; // Increment timer
-        stationaryTimer += Time.deltaTime; // Increment stationary timer
+       // stationaryTimer += Time.deltaTime; // Increment stationary timer
 
-        if (isStationary) // Check if the AI is currently stationary
-        {
-            if (stationaryTimer >= stationaryTime) // Check if stationary time has elapsed
-            {
-                isStationary = false; // Allow movement again
-                stationaryTimer = 0f; // Reset stationary timer
-            }
-            return; // Skip the movement logic if stationary
-        }
+        //if (isStationary) // Check if the AI is currently stationary
+        //{
+        //    if (stationaryTimer >= stationaryTime) // Check if stationary time has elapsed
+        //    {
+        //        isStationary = false; // Allow movement again
+       //         stationaryTimer = 0f; // Reset stationary timer
+        //    }
+       //     return; // Skip the movement logic if stationary
+       // }
 
         if (timer >= changeDestinationTime) // Check if it's time to change destination
         {
@@ -67,20 +67,6 @@ public class AgentManager : MonoBehaviour
         }
     }
      // Amount of damage the enemy deals
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Player")) // Check if the collided object is tagged as "Player"
-        {
-            if (Time.time >= lastAttackTime + attackCooldown) // Check if cooldown has passed
-            {
-                PlayerHealth playerHealth = collision.gameObject.GetComponent<PlayerHealth>(); // Get the PlayerHealth component
-                if (playerHealth != null)
-                {
-                    playerHealth.TakeDamage(damageAmount); // Call TakeDamage on the player
-                    lastAttackTime = Time.time; // Update the last attack time
-                }
-            }
-        }
-    }
+    
 }
 
