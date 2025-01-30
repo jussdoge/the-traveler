@@ -7,6 +7,8 @@ public class Swimming : MonoBehaviour
     public float swimSpeed = 5f; // Speed of swimming
     private bool isSwimming = false; // Track if the player is swimming
 
+    public PlayerMovement pm;
+
     // Update is called once per frame
     void Update()
     {
@@ -18,11 +20,16 @@ public class Swimming : MonoBehaviour
     }
 
     // Method to check if the player is in water
-    private bool IsInWater()
+   private bool IsInWater()
     {
-        // Implement your logic to determine if the player is in water
-        // For example, using a collider or a trigger
-        return true; // Placeholder, replace with actual condition
+    RaycastHit hit;
+    // Perform a raycast downwards from the player's position
+    if (Physics.Raycast(transform.position, Vector3.down, out hit, 1f)) // Adjust the distance as needed
+    {
+        // Check if the object hit is tagged as "Water"
+        return hit.collider.CompareTag("Water");
+    }
+    return false; // Not in water if raycast doesn't hit
     }
 
     // Handle swimming mechanics
