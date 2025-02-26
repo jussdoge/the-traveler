@@ -1088,6 +1088,21 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 481995042327841608, guid: 0630ddb66c43ce74b926a6ec5e0b0b3e,
         type: 3}
+      propertyPath: gravity
+      value: -25
+      objectReference: {fileID: 0}
+    - target: {fileID: 481995042327841608, guid: 0630ddb66c43ce74b926a6ec5e0b0b3e,
+        type: 3}
+      propertyPath: jumpHeight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 481995042327841608, guid: 0630ddb66c43ce74b926a6ec5e0b0b3e,
+        type: 3}
+      propertyPath: sensitivity
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 481995042327841608, guid: 0630ddb66c43ce74b926a6ec5e0b0b3e,
+        type: 3}
       propertyPath: attackLayer.m_Bits
       value: 8
       objectReference: {fileID: 0}
