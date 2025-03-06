@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Main Menu.unity
     guid: 5a90945de962db349b1f77fd2feed173
   - enabled: 1
-    path: Assets/Level 1.unity
+    path: Assets/Idyllic Fantasy Nature/Demo/Demo.unity
     guid: 00ad17d337a65f940adcf6e7def9f43e
   m_configObjects: {}
