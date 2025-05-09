@@ -6,6 +6,7 @@ public class PlayerHealth : MonoBehaviour
 {
     public int maxHealth = 100; // Maximum health of the player
     private int currentHealth; // Current health of the player
+    private bool isSwimming = false; // Track if the player is swimming
 
     void Start()
     {
@@ -43,24 +44,27 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log("Player healed: " + healAmount + ". Current health: " + currentHealth);
     }
 
-    // Method to handle collisions
-    void OnCollisionEnter(Collision collision)
+    // Method to handle swimming
+    public void Swim()
     {
-        Debug.Log("Collision detected with: " + collision.gameObject.name); // Log the name of the collided object
-        if (collision.gameObject.CompareTag("AI")) // Check if the collided object is tagged as "AI"
+        if (isSwimming)
         {
-            TakeDamage(5); // Call TakeDamage with a specified amount
-        }
-        else
-        {
-            Debug.Log("Collided with non-AI object: " + collision.gameObject.name); // Log if not an AI
+            Debug.Log("Player is swimming.");
+            // Add swimming logic here (e.g., movement, animations)
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKey(KeyCode.W)) // Example input for swimming
+        {
+            isSwimming = true;
+            Swim(); // Call swim method if swimming
+        }
+        else
+        {
+            isSwimming = false; // Reset swimming state
+        }
     }
-        
 }
